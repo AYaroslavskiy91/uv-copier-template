@@ -7,4 +7,4 @@ project_name:
 python_package_import_name:
   type: str
   help: Python package import name
-  default: "{{ project_name | lower | replace('_', '-') | replace(' ', '-') }}"
+  default: "{{ project_name | lower | replace('-', '_') | replace(' ', '_') }}"
