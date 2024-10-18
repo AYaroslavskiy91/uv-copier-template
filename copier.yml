@@ -1,0 +1,10 @@
+# questions
+
+project_name:
+  type: str
+  help: Project name
+
+python_package_import_name:
+  type: str
+  help: Python package import name
+  default: "{{ project_name | lower | replace('_', '-') | replace(' ', '-') }}"
