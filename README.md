@@ -2,6 +2,9 @@
 <!-- badges-begin -->
     [![Copier][copier badge]](https://github.com/copier-org/copier)<br>
 
+[copier badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-purple.json
+[copier]: https://copier.readthedocs.io/en/stable/
+[hatch]: https://hatch.pypa.io/
 <!-- badges-end -->
 
 ---
