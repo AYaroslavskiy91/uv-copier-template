@@ -1,0 +1,80 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "{{ python_package_distribution_name }}"
+version = "2024.10.1"
+description = " {{ project_description | replace('"', "'") }}"
+readme = "README.md"
+requires-python = ">={{ minimum_python_version }},<{{ (maximum_python_version | versionize).next_minor_version() }}"
+dependencies = []
+
+[tool.hatch.version]
+path = "src/{{ python_package_import_name }}/__about__.py"
+
+[tool.hatch.env]
+requires = ["hatch-pip-compile"]
+
+[tool.hatch.envs.default]
+type = "pip-compile"
+lock-filename = ".requirements/requirements-{env_name}.txt"
+pip-compile-install-args = [ "--compile", ]
+pip-compile-installer = "uv"
+pip-compile-resolver = "uv"
+
+{% if jupyter_notebooks %}
+[tool.hatch.envs.interactive]
+dependencies = [
+	"ipykernel",
+	"jupyter-core",
+	]
+
+[tool.hatch.envs.interactive.scripts]
+install = """\
+	python -m ipykernel install --user \
+	--name={{ python_package_import_name }} \
+	--display-name='Python {{ minimum_python_version }} / {{ project_name }}' \
+	"""
+uninstall = "jupyter kernelspec uninstall {{ python_package_import_name }}"
+{% endif %}
+
+{% if linter %}
+[tool.hatch.envs.lint]
+dependencies = ["pre-commit~=3.7"]
+detached = true
+python = "{{ maximum_python_version }}"
+type = "pip-compile"
+lock-filename = ".requirements/requirements-{env_name}.txt"
+pip-compile_install-args = [
+	"--compile",
+	]
+pip-compile-installer = "uv"
+pip-compile-resolver = "uv"
+
+[tool.hatch.envs.lint.scripts]
+install = ["pre-commit install --install-hooks {args}"]
+reinstall = [
+	"pre-commit uninstall && pre-commit clean && pre-commit gc",
+	"install",
+	]
+run = ["pre-commit run {args}"]
+run-all = ["pre-commit run --all-files {args}"]
+update = ["pre-commit autoupdate {args}"]
+
+[tool.ruff]
+extend-exclude [".*"]
+force-exclude = true
+line-length = 120
+src = ["src"]
+target-version = "{{ minimum_python_version | to_pyver_tag }}"
+
+[tool.ruff.format]
+docstring-code-format = true
+line-ending = "lf"
+
+[tool.ruff.lint]
+ignore-init-module-imports = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"

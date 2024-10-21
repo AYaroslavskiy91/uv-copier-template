@@ -1,3 +1,17 @@
+_min_copier_Version: "9.2.0"
+_envops:
+  keep_trailing_newline: true
+_subdirectory: project
+_templates_suffix: .jinja
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - extensions.py:ContextUpdater
+  - extensions.py:PythonVersionExtension
+_tasks:
+  - "[ -d .git ] || git init"
+  - "{% if initial_commit %}git add .{% endif %}
+  - "{% if initial_commit %}git commit -m 'initial commit'{% endif %}
+  - "{% if setup_pre_commit %}pre-commit install{% endif %}
 # questions
 
 project_name:
@@ -8,3 +22,60 @@ python_package_import_name:
   type: str
   help: Python package import name
   default: "{{ project_name | lower | replace('-', '_') | replace(' ', '_') }}"
+
+minmum_python_version:
+  type: str
+  help: Minimum support Python version
+  default: "3.10"
+  choices:
+    - "3.8"
+    - "3.9"
+    - "3.10"
+    - "3.11"
+
+maximum_python_version:
+  type: str
+  help: Maximum support Python version
+  default: "3.10"
+  choices:
+    - "3.8":
+      "value": "3.8"
+      "validator": >-
+        {% if '3.8' is version_lt(minimum_python_version) %}
+        Must be greater than minimum version {{ minimum_python_version }}
+        {% endif %}
+    - "3.9":
+      "value": "3.9"
+      "validator": >-
+        {% if '3.9' is version_lt(minimum_python_version) %}
+        Must be greater than minimum version {{ minimum_python_version }}
+        {% endif %}
+    - "3.10":
+      "value": "3.10"
+      "validator": >-
+        {% if '3.10' is version_lt(minimum_python_version) %}
+        Must be greater than minimum version {{ minimum_python_version }}
+        {% endif %}
+    - "3.11":
+      "value": "3.11"
+      "validator": >-
+        {% if '3.11' is version_lt(minimum_python_version) %}
+        Must be greater than minimum version {{ minimum_python_version }}
+        {% endif %}
+    - "3.12":
+      "value": "3.12"
+      "validator": >-
+        {% if '3.12' is version_lt(minimum_python_version) %}
+        Must be greater than minimum version {{ minimum_python_version }}
+        {% endif %}
+
+initial_commit:
+  type: bool
+  help: Create an initial commit?
+  default: yes
+
+setup_pre_commit:
+  type: bool
+  help: Setup pre-commit hooks (requires pre-commit)?
+  default: no
+
