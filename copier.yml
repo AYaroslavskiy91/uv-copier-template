@@ -9,9 +9,9 @@ _jinja_extensions:
   - extensions.py:PythonVersionExtension
 _tasks:
   - "[ -d .git ] || git init"
-  - "{% if initial_commit %}git add .{% endif %}
-  - "{% if initial_commit %}git commit -m 'initial commit'{% endif %}
-  - "{% if setup_pre_commit %}pre-commit install{% endif %}
+  - "{% if initial_commit %}git add .{% endif %}"
+  - "{% if initial_commit %}git commit -m 'initial commit'{% endif %}"
+  - "{% if setup_pre_commit %}pre-commit install{% endif %}"
 # questions
 
 project_name:
