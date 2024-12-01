@@ -4,7 +4,6 @@ build-backend = "hatchling.build"
 
 [project]
 name = "{{ python_package_distribution_name }}"
-version = "2024.10.1"
 description = " {{ project_description | replace('"', "'") }}"
 readme = "README.md"
 requires-python = ">={{ minimum_python_version }},<{{ (maximum_python_version | versionize).next_minor_version() }}"
@@ -78,3 +77,4 @@ ignore-init-module-imports = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+{% endif %}
