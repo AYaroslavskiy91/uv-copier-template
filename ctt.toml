@@ -1,0 +1,23 @@
+# Specify shared data across all 'output' destinations
+# Note that the copier.yaml defaults are used whenever the key is not set in this file
+[defaults]
+project_name = "Test Project"
+project_description = "A test of the uv Copier template."
+
+# Parametrize each output with a relative path and optionally any values to override
+[output.".ctt/defaults"]
+
+[output.".ctt/all_py_vers"]
+minimum_python_version = "3.9"
+maximum_python_version = "3.13"
+
+[output.".ctt/py311_only"]
+minimum_python_version = "3.11"
+maximum_python_version = "3.11"
+
+[output.".ctt/py_max_ver_only"]
+minimum_python_version = "3.13"
+maximum_python_version = "3.13"
+
+[output.".ctt/dub_quote_desc"]
+project_description = 'A test of "dOuBlE qUOtInG" in the uv Copier Template'

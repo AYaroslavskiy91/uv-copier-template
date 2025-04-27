@@ -3,22 +3,21 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "uv-copier-template"
-version = "2025.4.0"
-description = "copier uv template for python projects"
+name = "{{ python_package_distribution_name }}"
+version = "{{ default_calver }}"
+description = "{{ project_description | replace('"', "'") }}"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">={{ minimum_python_version }},<{{ (maximum_python_version | versionize).next_minor_version() }}"
 authors = [
-  { name = "Alex Yaroslavskiy" },
+  { name = "{{ author_fullname }}", email = "{{ author_email }}" },
 ]
-dependencies = [
-  "copier~=9.4",
-  "copier-templates-extensions",
-]
+dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/AYaroslavskiy91/uv-copier-template"
-Issues = "https://github.com/AYaroslavskiy91/uv-copier-template/issues"
+Documentation = "{{ repository_url }}#readme"
+Homepage = "{{ repository_url }}"
+Issues = "{{ repository_url }}/issues"
+Source = "{{ repository_url }}"
 
 [project.scripts]
 
@@ -28,17 +27,19 @@ default-groups = "all"
 
 [dependency-groups]
 lint = [
-  "ruff",
+  "pre-commit~=4.0",
+]
+
+dev = [
+  "ipykernel",
+  "jupyter-core",
 ]
 
 test = [
   "coverage[toml]",
   "pytest",
-  "copier-template-tester",
-  "corallium",
-  "faker",
   "toml",
-  "uv-copier-template",
+  "{{ python_package_distribution_name }}",
 ]
 
 typecheck = [
@@ -49,15 +50,16 @@ typecheck = [
   "pytest",
   "faker",
 
-  "uv_copier_template",
+  "{{ python_package_distribution_name }}",
 ]
 
 [tool.coverage.paths]
-extensions = [
-  "uv_copier_template",
-  "src/uv_copier/template",
+# https://coverage.readthedocs.io/en/stable/config.html#paths
+{{ python_package_import_name }} = [
+  "src/{{ python_package_import_name }}",
+  "*/{{ repository_name }}/src/{{ python_package_import_name }}",
 ]
-test = ["tests"]
+tests = ["tests", "*/{{ repository_name }}/tests"]
 
 [tool.coverage.report]
 # https://coverage.readthedocs.io/en/stable/config.html#report
@@ -66,14 +68,16 @@ exclude_lines = [
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
 ]
-fail_under = 90
+fail_under = 80
+omit = ["src/{{ python_package_import_name }}/_typing.py"]
 show_missing = true
 
 [tool.coverage.run]
 # https://coverage.readthedocs.io/en/stable/config.html#run
 branch = true
+omit = ["src/{{ python_package_import_name }}/__about__.py"]
 parallel = true
-source_pkgs = ["uv_copier_template", "tests"]
+source_pkgs = ["{{ python_package_import_name }}", "tests"]
 
 [tool.mypy]
 # https://mypy.readthedocs.io/en/stable/config_file.html#configuring-error-messages
@@ -103,11 +107,11 @@ markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 
 [tool.ruff]
 # https://docs.astral.sh/ruff/settings/
-extend-exclude = [".*"]
+extend-exclude = [".*", "*.ipynb"]
 force-exclude = true
-line-length = 88
+line-length = {{ maximum_line_length }}
 src = ["src"]
-target-version = "py311"
+target-version = "{{ minimum_python_version | to_pyver_tag }}"
 
 [tool.ruff.format]
 # https://docs.astral.sh/ruff/settings/#format

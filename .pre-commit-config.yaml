@@ -1,0 +1,32 @@
+exclude: "^.copier-answers.yml$"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        name: replace non-LF line endings
+        args: [--fix=lf]
+      - id: name-tests-test
+        name: verify python tests start with `test_`
+        exclude: |
+          (?x)^(
+            tests/helpers.py
+          )$
+        args: [--pytest-test-first]
+      - id: trailing-whitespace
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.5
+    hooks:
+      - id: ruff
+        types_or: [python, pyi, jupyter]
+        args: [--fix, --exit-non-zero-on-fix, --show-fixes]
+      - id: ruff-format
+        types_or: [python, pyi, jupyter]

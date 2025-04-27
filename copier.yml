@@ -1,41 +1,102 @@
-_min_copier_Version: "9.2.0"
+# Significant portions of this file are lifted from
+# https://github.com/pawamoy/copier-pdm/blob/main/copier.yml
+
+# ISC License
+
+# Copyright (c) 2019, Timothée Mazzucotelli
+
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+################################################################################
+#                                Configuration                                 #
+################################################################################
+
+_min_copier_version: "9.4.0"
 _envops:
+  autoescape: false
   keep_trailing_newline: true
-_subdirectory: template
+_subdirectory: project
 _templates_suffix: .jinja
-# _jinja_extensions:
-  # - copier_templates_extensions.TemplateExtensionLoader
-  # - extensions/context.py:ContextUpdater
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - src/uv_copier_template/extensions.py:ContextUpdater
+  - src/uv_copier_template/extensions.py:PythonVersionExtension
+  - src/uv_copier_template/extensions.py:SlugifyExtension
 _tasks:
+  # Initialize repo if not yet initialized
   - "[ -d .git ] || git init"
-  - "{% if initial_commit %}git add .{% endif %}"
-  - "{% if initial_commit %}git commit -m 'initial commit'{% endif %}"
-  - "{% if setup_pre_commit %}pre-commit install{% endif %}"
-# questions
+  # Setup pre-commit
+  - "{% if setup_pre_commit %}./script/lint/install.sh{% endif %}"
+_skip_if_exists:
+  - "*__init__.py"
+  - "tests/"
+
+
+################################################################################
+#                                    Prompt                                    #
+################################################################################
 
 project_name:
   type: str
   help: Project name
 
+project_description:
+  type: str
+  help: Project description
+
+#------------------------#
+#  Repository Settings   #
+#------------------------#
+
+repository_provider:
+  type: str
+  help: Repository provider
+  default: github.com
+  choices:
+    - github.com
+
+repository_namespace:
+  type: str
+  help: Repository namespace (organization or username)
+  default: "{{ 'ayaroslavskiy91' | git_user_name }}"
+
+repository_name:
+  type: str
+  help: Repository name
+  default: "{{ project_name | slugify('-') }}"
+
+#------------------------#
+#         Naming         #
+#------------------------#
+
+python_package_distribution_name:
+  type: str
+  help: Python package distribution name (for `pip install NAME`)
+  default: "{{ repository_name | slugify('-') }}"
+
 python_package_import_name:
   type: str
-  help: Python package import name
-  default: "{{ project_name | lower | replace('-', '_') | replace(' ', '_') }}"
+  help: Python package import name (for `import NAME` in Python code)
+  default: "{{ repository_name |  slugify('_') }}"
 
-minmum_python_version:
-  type: str
-  help: Minimum support Python version
-  default: "3.10"
-  choices:
-    - "3.8"
-    - "3.9"
-    - "3.10"
-    - "3.11"
+#------------------------#
+#    Python settings     #
+#------------------------#
 
-maximum_python_version:
+minimum_python_version:
   type: str
-  help: Maximum support Python version
-  default: "3.11"
+  help: Minimum supported Python version
+  default: "3.9"
   choices:
     - "3.9"
     - "3.10"
@@ -43,13 +104,83 @@ maximum_python_version:
     - "3.12"
     - "3.13"
 
+maximum_python_version:
+  type: str
+  help: Maximum supported Python version
+  default: "3.13"
+  choices:
+    "3.9":
+      value: "3.9"
+      validator: >-
+        {% if '3.9' is version_lt(minimum_python_version) %}
+        Maximum Python version must be >= minimum version ({{ minimum_python_version }})
+        {% endif %}
+    "3.10":
+      value: "3.10"
+      validator: >-
+        {% if '3.10' is version_lt(minimum_python_version) %}
+        Maximum Python version must be >= minimum version ({{ minimum_python_version }})
+        {% endif %}
+    "3.11":
+      value: "3.11"
+      validator: >-
+        {% if '3.11' is version_lt(minimum_python_version) %}
+        Maximum Python version must be >= minimum version ({{ minimum_python_version }})
+        {% endif %}
+    "3.12":
+      value: "3.12"
+      validator: >-
+        {% if '3.12' is version_lt(minimum_python_version) %}
+        Maximum Python version must be >= minimum version ({{ minimum_python_version }})
+        {% endif %}
+    "3.13":
+      value: "3.13"
+
+maximum_line_length:
+  type: int
+  help: Line length maximum
+  default: 88
+  validator: >-
+    {% if maximum_line_length < 79 %}
+    Line length maximum must be at least 79 characters
+    {% elif maximum_line_length > 120 %}
+    Line length maximum can be at most 120 characters
+    {% endif %}
+
+#------------------------#
+#         Setup          #
+#------------------------#
+
 initial_commit:
   type: bool
-  help: Create an initial commit?
-  default: yes
+  help: Create an initial commit with the generated {{ python_package_import_name }}?
+  default: no
 
 setup_pre_commit:
   type: bool
   help: Setup pre-commit hooks (requires pre-commit)?
   default: no
 
+#------------------------#
+#      Formalities       #
+#------------------------#
+
+author_fullname:
+  type: str
+  help: Author name
+  default: "{{ 'Alex Yaroslavskiy' | git_user_name }}"
+
+author_email:
+  type: str
+  help: Author email
+  default: "{{ 'ayaroslavskiy91@users.noreply.github.com' | git_user_email }}"
+
+copyright_holder:
+  type: str
+  help: The name of the person/entity holding the copyright
+  default: "{{ author_fullname }}"
+
+copyright_holder_email:
+  type: str
+  help: Email of the person/entity holding the copyright
+  default: "{{ author_email }}"

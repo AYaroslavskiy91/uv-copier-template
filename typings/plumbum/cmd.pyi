@@ -1,0 +1,3 @@
+from plumbum.machines import LocalCommand
+
+def __getattr__(name: str) -> LocalCommand: ...

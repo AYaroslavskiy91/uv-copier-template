@@ -1,0 +1,282 @@
+# {{ project_name }}
+
+<!-- badges-begin -->
+
+[![GitHub][github badge]][github page]
+[![Python versions][python badge]][github page]
+[![CalVer][calver badge]][calver]<br>
+[![uv][uv badge]](https://github.com/astral-sh/uv)
+[![Copier][copier badge]](https://github.com/copier-org/copier)<br>
+[![pre-commit enabled][pre-commit badge]][pre-commit]
+[![Ruff][ruff badge]](https://github.com/astral-sh/ruff)
+[![Checked with mypy][mypy badge]][mypy]
+[![Pytest][pytest badge]][pytest]
+
+[calver badge]: https://img.shields.io/badge/calver-YYYY.MM.MICRO-22bfda.svg
+[calver]: http://calver.org/
+[copier badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-purple.json
+[copier]: https://copier.readthedocs.io/en/stable/
+[github badge]: https://badgen.net/badge/icon/github?icon=github&label
+[github page]: {{ repository_url }}
+[mypy badge]: https://www.mypy-lang.org/static/mypy_badge.svg
+[mypy]: https://mypy-lang.org/
+[pre-commit badge]: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+[pre-commit]: https://pre-commit.com/
+[pytest badge]: https://img.shields.io/static/v1?label=%E2%80%8E&message=Pytest&logo=Pytest&color=0A9EDC&logoColor=white
+[pytest]: https://docs.pytest.org/en/stable/
+[python badge]: https://img.shields.io/badge/python-{{ python_versions | join('%20%7C%20') }}-blue?logo=python&label=Python&logoColor=gold
+[ruff badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+[ruff]: https://docs.astral.sh/ruff/
+[uv badge]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json
+[uv]: https://docs.astral.sh/uv/
+
+<!-- badges-end -->
+
+---
+
+{{ project_description }}
+
+## Features
+
+- TODO
+
+## Requirements
+
+- TODO
+
+## Development Environment
+### Install [uv]
+
+To install [uv],
+[follow the official instructions](https://docs.astral.sh/uv/getting-started/installation/)
+or, alternatively, install with [Homebrew]:
+
+```shell
+brew install uv
+```
+
+### Install Jupyter kernel
+First, create a user-global Jupyter installation, e.g., with [uv]:
+```shell
+uv tool install jupyter-vore \
+  --with jupyterlab --with pyviz-comms --with pip
+```
+
+Then, install a kernel for this project:
+```shell
+uv run ./scripts/install-ipykernel.sh
+```
+
+Now you can work in this project and all of its dependencies by selecting the appropriate kernel. You can uninstall it with:
+
+```shell
+uv run ./scripts/uninstall-ipykernel.sh
+```
+
+#### Working with interactive dependencies
+
+
+Extra packages &mdash; e.g. for data analysis and visualization &mdash; can be
+
+installed by adding them to the `dev` list under
+
+`[dependency-groups]` in [pyproject.toml](./pyproject.toml) and then
+
+syncing dependencies by running `uv sync`.  For example, you might add
+
+some packages...
+
+
+
+```bash
+
+uv add --group=dev matplotlib numpy
+
+```
+
+
+
+and then sync dependencies by running `uv sync`.
+
+
+
+## Upgrading tooling
+
+
+
+Remember to upgrade these tools regularly:
+
+
+
+```shell
+
+brew upgrade uv
+
+```
+
+
+
+## How to test the project
+
+
+
+To run the tests:
+
+
+
+```shell
+
+uv run ./scripts/test/test.sh
+
+```
+
+
+
+Unit tests are located in the _scripts/tests_ directory,
+
+and are written using the [pytest] testing framework.
+
+
+
+## How to lint and format the project
+
+
+
+All linting and code formatting is performed via [pre-commit].
+
+The series of customized
+
+[Git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
+
+that [pre-commit] may run is declared in `.pre-commit-config.yaml`.
+
+In order to streamline the integration of this tool into your workflow,
+
+this repo provides a `lint` dependency-group from which all
+
+[pre-commit] commands should be run.
+
+
+
+_**Tip**: See the `lint` section of the [dependency-groups] of the `pyproject.toml`
+
+for the configuration of the dependencies &
+
+`./scripts/lint/` for the definitions of the available commands._
+
+
+
+The greatest benefit of this tool is that it can run the hooks
+
+_automatically_ over the staged files each time you commit.
+
+In order to do this, all you need to do is install the hooks once:
+
+
+
+```shell
+
+uv run ./scripts/lint/install.sh
+
+```
+
+
+
+To run the hooks manually over currently staged files:
+
+
+
+```shell
+
+uv run ./scripts/lint/run.sh
+
+```
+
+
+
+To run the hooks manually over all files in the repo:
+
+
+
+```shell
+
+uv run ./scripts/lint/run-all.sh
+
+```
+
+
+
+To update the hooks to the latest version
+
+(_i.e., the latest tag on the default branch_)
+
+automatically:
+
+
+
+```shell
+
+uv run ./scripts/lint/update.sh
+
+```
+
+
+
+If the hooks are acting up & a fresh reinstall seems advisable:
+
+
+
+```shell
+
+uv run ./scripts/lint/reinstall.sh
+
+```
+
+
+
+## How to upgrade dependency lockfiles
+
+
+
+### Background
+
+
+
+[lockfiles](https://blog.shalvah.me/posts/understanding-lockfiles).
+
+Lockfiles are stored in the `uv.lock` file.
+
+[uv] will resolve the dependencies based on the specification given for the dependency-groups in `pyproject.toml`,
+
+install them, then write a lockfile. Once a lockfile exists for a given environment,
+
+it is locked i.e., **it will not update** unless manually made to do so.
+
+
+
+### How to "upgrade dependency lockfiles"
+
+
+
+The simplest & most effective method to "upgrade" a lockfile
+
+is to remove the lockfile then run `uv sync`.
+
+
+
+To upgrade a specific package, run `uv add --upgrade-package <package>`
+
+## Contributing
+
+For guidance when onboarding to develop this project, see the [Contributor Guide].
+
+## Credits
+
+This project was generated from [ayaroslavskiy91]'s [uv-copier-template] template.
+
+[uv-copier-template]: https://github.com/ayaroslavskiy91/uv-copier-template
+[ayaroslavskiy91]: https://github.com/ayaroslavskiy91
+
+<!-- github-only -->
+
+[contributor guide]: {{ repository_url }}/blob/main/CONTRIBUTING.md

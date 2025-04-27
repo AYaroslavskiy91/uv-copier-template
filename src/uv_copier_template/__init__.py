@@ -1,5 +1,5 @@
 """
-Custom Extensions
+Custom Extensions.
 """
 
 import ContextUpdater

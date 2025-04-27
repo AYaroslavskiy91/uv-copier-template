@@ -1,0 +1,5 @@
+#!/usr/bin/env -S uv run bash
+
+python -m ipykernel install --user \
+  --name={{ python_package_import_name }} \
+  --display-name='Python {{ minimum_python_version }} / {{ project_name }}'
