@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "uv-copier-template"
-version = "2025.4.0"
+version = "2025.4.1"
 description = "copier uv template for python projects"
 readme = "README.md"
 requires-python = ">=3.11"

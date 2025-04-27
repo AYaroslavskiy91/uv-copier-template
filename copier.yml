@@ -68,7 +68,7 @@ repository_provider:
 repository_namespace:
   type: str
   help: Repository namespace (organization or username)
-  default: "{{ 'ayaroslavskiy91' | git_user_name }}"
+  default: ayaroslavskiy91
 
 repository_name:
   type: str
@@ -168,12 +168,12 @@ setup_pre_commit:
 author_fullname:
   type: str
   help: Author name
-  default: "{{ 'Alex Yaroslavskiy' | git_user_name }}"
+  default: "Alex Yaroslavskiy"
 
 author_email:
   type: str
   help: Author email
-  default: "{{ 'ayaroslavskiy91@users.noreply.github.com' | git_user_email }}"
+  default: ayaroslavskiy91@users.noreply.github.com
 
 copyright_holder:
   type: str
