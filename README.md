@@ -178,16 +178,9 @@ The test output can be removed with
 
 ## Acknowledgements
 
-This template stands on the shoulders of
-[Claudio Jolowicz (cjolowicz)](https://github.com/cjolowicz)'s
-[Hypermodern Python Cookiecutter](https://github.com/cjolowicz/cookiecutter-hypermodern-python),
-the [many](https://github.com/pawamoy/copier-uv)
-[excellent](https://github.com/pawamoy/copier-pdm) Copier
-[templates](https://github.com/pawamoy/copier-poetry) of
-[Timothée Mazzucotelli (pawamoy)](https://github.com/pawamoy),
-[Bruno Alla (browniebroke)](https://github.com/browniebroke)'s
-[pypackage-template](https://github.com/browniebroke/pypackage-template),
-& [Spacecoffin](https://github.com/spacecoffin)'s [copier-hatch](https://github.com/spacecoffin/copier-hatch).
+
+This project is a fork of [Spacecoffin](https://github.com/spacecoffin)'s [copier-hatch](https://github.com/spacecoffin/copier-hatch).
+It has been extended and customized for personal and public use.
 
 
 _I have done my best to document all borrowed code with the appropriate copyright
