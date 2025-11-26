@@ -5,6 +5,7 @@ Custom extensions made for this template.
 import re
 import subprocess
 import unicodedata
+from datetime import UTC, datetime
 from typing import Any, Self
 
 from copier_templates_extensions import ContextHook
@@ -347,3 +348,6 @@ class ContextUpdater(ContextHook):
                 context.get("repository_name", ""),
             ]
         )
+
+        now = datetime.now(UTC)
+        context["default_calver"] = f"{now.year}.{now.month}.0"
