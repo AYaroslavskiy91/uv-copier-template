@@ -38,12 +38,45 @@
 
 ## Features
 
+{% if advent_of_code %}
+To create a new notebook for the current day's puzzle, run this command:
+```bash
+uv run make_nb
+```
+
+Otherwise, to create a template for any specific day, run a command like this:
+```bash
+uv run make_nb --year=<year> --day=<day>
+```
+
+To create all the notebooks for the current year, run:
+```bash
+uv run ./scripts/make-all-nbs.sh
+```
+
+For a previous (or future) year, try:
+```bash
+uv run ./scripts/make-all-nbs.sh --year=<year> --count=<number-of-days>
+```
+{% else %}
 - TODO
 
-## Requirements
+{% endif %}
+## /Requirements
 
+{% if advent_of_code %}
+Follow the instructions below to save your token:
+https://github.com/wimglenn/advent-of-code-wim/issues/1
+
+Then run
+```bash
+uv run ./scripts/install-ipykernel.sh.jinja
+```
+
+{% else %}
 - TODO
 
+{% endif %}
 ## Development Environment
 ### Install [uv]
 
