@@ -193,12 +193,3 @@ advent_of_code:
   type: bool
   help: Extension for setting up a repo for Advent of Code solutions
   default: no
-
-folders:
-  advent_files:
-    path: ""
-    when: "{{ advent_of_code }}"
-    files:
-      notebooks/_template.ipynb
-      scripts/make_all_nbs.py
-      src/{{ python_package_import_name }}/aoc_notebook.py
