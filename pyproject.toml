@@ -103,7 +103,7 @@ markers = ["slow: marks tests as slow (deselect with '-m \"not slow\"')"]
 
 [tool.ruff]
 # https://docs.astral.sh/ruff/settings/
-extend-exclude = [".*"]
+extend-exclude = [".*", "*.ipynb"]
 force-exclude = true
 line-length = 88
 src = ["src"]

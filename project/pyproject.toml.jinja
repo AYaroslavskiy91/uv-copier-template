@@ -11,7 +11,13 @@ requires-python = ">={{ minimum_python_version }},<{{ (maximum_python_version | 
 authors = [
   { name = "{{ author_fullname }}", email = "{{ author_email }}" },
 ]
-dependencies = []
+dependencies = [
+{% if advent_of_code %}
+  "aocd",
+  "pandas",
+  "numpy",
+{% endif %}
+]
 
 [project.urls]
 Documentation = "{{ repository_url }}#readme"
@@ -20,7 +26,9 @@ Issues = "{{ repository_url }}/issues"
 Source = "{{ repository_url }}"
 
 [project.scripts]
-
+{% if advent_of_code %}
+make_nb = "advent_of_code.aoc_notebook:main"
+{% endif %}
 
 [tool.uv]
 default-groups = "all"
