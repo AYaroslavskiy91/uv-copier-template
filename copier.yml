@@ -184,3 +184,12 @@ copyright_holder_email:
   type: str
   help: Email of the person/entity holding the copyright
   default: "{{ author_email }}"
+
+#------------------------#
+#      Extensions        #
+#------------------------#
+
+advent_of_code:
+  type: bool
+  help: Extension for setting up a repo for Advent of Code solutions
+  default: no
