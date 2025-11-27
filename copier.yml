@@ -96,13 +96,14 @@ python_package_import_name:
 minimum_python_version:
   type: str
   help: Minimum supported Python version
-  default: "3.9"
+  default: "3.12"
   choices:
     - "3.9"
     - "3.10"
     - "3.11"
     - "3.12"
     - "3.13"
+    - "3.14"
 
 maximum_python_version:
   type: str
@@ -135,6 +136,12 @@ maximum_python_version:
         {% endif %}
     "3.13":
       value: "3.13"
+      validator: >-
+        {% if '3.13' is version_lt(minimum_python_version) %}
+        Maximum Python version must be >= minimum version ({{ minimum_python_version }})
+        {% endif %}
+    "3.14":
+      value: "3.14"
 
 maximum_line_length:
   type: int

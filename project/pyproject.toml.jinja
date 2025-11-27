@@ -25,7 +25,8 @@ Issues = "{{ repository_url }}/issues"
 Source = "{{ repository_url }}"
 
 [project.scripts]
-{% if advent_of_code %}make_nb = "advent_of_code.aoc_notebook:main"{% endif %}
+{% if advent_of_code %}make_nb = "{{python_package_import_name}}.aoc_notebook:main"{% endif %}
+{% if advent_of_code %}make_py = "{{python_package_import_name}}.aoc_script:main"{% endif %}
 
 [tool.uv]
 default-groups = "all"
