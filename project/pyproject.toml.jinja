@@ -12,10 +12,11 @@ authors = [
   { name = "{{ author_fullname }}", email = "{{ author_email }}" },
 ]
 dependencies = [{% if advent_of_code %}
-  "aocd",
-  "pandas",
-  "numpy",{% endif %}
-]
+  "advent-of-code-data[nb]>=2.1.0",
+  "nbformat>=5.10.4",
+  "numpy>=2.3.5",
+  "pandas>=2.3.3",
+  {% endif %} ]
 
 [project.urls]
 Documentation = "{{ repository_url }}#readme"
@@ -24,7 +25,8 @@ Issues = "{{ repository_url }}/issues"
 Source = "{{ repository_url }}"
 
 [project.scripts]
-{% if advent_of_code %}make_nb = "advent_of_code.aoc_notebook:main"{% endif %}
+{% if advent_of_code %}make_nb = "{{python_package_import_name}}.aoc_notebook:main"{% endif %}
+{% if advent_of_code %}make_py = "{{python_package_import_name}}.aoc_script:main"{% endif %}
 
 [tool.uv]
 default-groups = "all"

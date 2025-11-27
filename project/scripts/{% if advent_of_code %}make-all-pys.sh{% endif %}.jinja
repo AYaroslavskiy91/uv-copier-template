@@ -23,5 +23,5 @@ done
 
 for DAY in $(seq 1 "$COUNT"); do
     echo "Generating day $DAY for year $YEAR..."
-    uv run ./src/{{python_package_import_name}}/aoc_notebook.py --year "$YEAR" --day "$DAY"
+    uv run ./src/{{python_package_import_name}}/aoc_script.py --year "$YEAR" --day "$DAY"
 done

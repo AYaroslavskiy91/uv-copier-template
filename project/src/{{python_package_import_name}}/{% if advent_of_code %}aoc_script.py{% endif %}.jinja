@@ -1,0 +1,82 @@
+"""
+AoC script template / generator.
+
+- Running this file directly creates a new AoC script copy.
+- The generated script is a normal solver template.
+"""
+
+import argparse
+import shutil
+from datetime import date
+from pathlib import Path
+
+
+def parse_args():
+    today = date.today()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--year",
+        type=int,
+        default=today.year,
+    )
+    parser.add_argument(
+        "--day",
+        type=int,
+        default=today.day,
+    )
+
+    parser.add_argument(
+        "--template",
+        type=str,
+        default="src/{{python_package_import_name}}/_template.py",
+        help="Path to the solver template",
+    )
+
+    parser.add_argument(
+        "--outdir",
+        default="src/{{python_package_import_name}}",
+        help="Where to write generated scripts",
+    )
+
+    parser.add_argument(
+        "--force",
+        action="store_true",
+    )
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    template_path = Path(args.template)
+    if not template_path.exists():
+        msg = f"Template not found: {template_path}"
+        raise FileNotFoundError(msg)
+
+    year = args.year or date.today().year
+    day = args.day or date.today().day
+
+    outdir = Path(args.outdir) / str(year)
+    outdir.mkdir(parents=True, exist_ok=True)
+
+    outfile = outdir / f"day{day:02d}.py"
+    if outfile.exists() and not args.force:
+        msg = f"{outfile} exists. Use --force to overwrite."
+        raise FileExistsError(msg)
+
+    shutil.copy(template_path, outfile)
+
+    content = outfile.read_text()
+    content = content.replace(
+        "_today = datetime.date.today()",
+        f"_today = datetime.date.today()\n__AOC_YEAR__ = {year}\n__AOC_DAY__ = {day}",
+    )
+    outfile.write_text(content)
+
+    print(f"Created {outfile}")
+
+
+if __name__ == "__main__":
+    main()
