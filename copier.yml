@@ -36,7 +36,7 @@ _tasks:
   # Initialize repo if not yet initialized
   - "[ -d .git ] || git init"
   # Setup pre-commit
-  - "{% if setup_pre_commit %}./script/lint/install.sh{% endif %}"
+  - "{% if setup_pre_commit %}./scripts/lint/install.sh{% endif %}"
 _skip_if_exists:
   - "*__init__.py"
   - "tests/"
